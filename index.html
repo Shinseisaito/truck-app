@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>大型ダンプ運搬管理システム</title>
+<title>トラック運搬管理システム</title>
 
 <style>
 
@@ -140,7 +140,7 @@ textarea{
 <body>
 
 <div class="header">
-大型ダンプ運搬管理システム
+トラック運搬管理システム
 </div>
 
 <div class="container">
@@ -423,6 +423,30 @@ function calcDistance(){
 
 async function sendData(){
 
+async function sendData(){
+
+  // 写真取得
+
+  const photoInput =
+  document.getElementById("photo");
+
+  let photoBase64 = "";
+  let photoName = "";
+  let photoType = "";
+
+  if(photoInput.files.length > 0){
+
+    const file =
+    photoInput.files[0];
+
+    photoName = file.name;
+    photoType = file.type;
+
+    photoBase64 =
+    await toBase64(file);
+
+  }
+
   const data = {
 
     driver:
@@ -452,7 +476,15 @@ async function sendData(){
     memo:
     document.getElementById("memo").value,
 
-    checks:checks
+    checks:checks,
+
+    // 写真
+
+    photo:photoBase64,
+
+    photoName:photoName,
+
+    photoType:photoType
 
   };
 
@@ -467,7 +499,29 @@ async function sendData(){
   alert("送信完了");
 
 }
+function toBase64(file){
 
+  return new Promise((resolve,reject)=>{
+
+    const reader =
+    new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = ()=>{
+
+      resolve(
+        reader.result.split(",")[1]
+      );
+
+    };
+
+    reader.onerror = error =>
+      reject(error);
+
+  });
+
+}
 </script>
 
 </body>
