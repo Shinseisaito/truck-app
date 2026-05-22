@@ -11,13 +11,13 @@
 
 body{
   margin:0;
-  background:#f1f3f5;
+  background:#f3f4f6;
   font-family:sans-serif;
   padding-bottom:120px;
 }
 
 .header{
-  background:#1f2937;
+  background:#111827;
   color:white;
   padding:20px;
   font-size:24px;
@@ -41,7 +41,6 @@ body{
   font-size:20px;
   font-weight:bold;
   margin-bottom:20px;
-  color:#111827;
 }
 
 label{
@@ -50,12 +49,13 @@ label{
   font-weight:bold;
 }
 
-input,textarea{
+input,
+textarea{
   width:100%;
   box-sizing:border-box;
   padding:14px;
   border-radius:10px;
-  border:1px solid #ccc;
+  border:1px solid #d1d5db;
   margin-bottom:20px;
   font-size:16px;
 }
@@ -65,7 +65,7 @@ textarea{
 }
 
 .check-item{
-  margin-bottom:25px;
+  margin-bottom:24px;
 }
 
 .check-title{
@@ -81,9 +81,9 @@ textarea{
 
 .check-buttons button{
   flex:1;
+  padding:16px;
   border:none;
   border-radius:12px;
-  padding:16px;
   font-size:18px;
   font-weight:bold;
   background:#d1d5db;
@@ -104,6 +104,14 @@ textarea{
   color:white;
 }
 
+.result-box{
+  background:#eef2ff;
+  padding:15px;
+  border-radius:12px;
+  font-size:18px;
+  font-weight:bold;
+}
+
 .fixed-submit{
   position:fixed;
   bottom:0;
@@ -116,21 +124,17 @@ textarea{
 
 .submit-btn{
   width:100%;
-  padding:18px;
   border:none;
   border-radius:14px;
+  padding:18px;
   background:#2563eb;
   color:white;
   font-size:22px;
   font-weight:bold;
 }
 
-.result-box{
-  background:#eef2ff;
-  padding:15px;
-  border-radius:12px;
-  font-size:18px;
-  font-weight:bold;
+.submit-btn:disabled{
+  opacity:0.5;
 }
 
 </style>
@@ -145,8 +149,6 @@ textarea{
 
 <div class="container">
 
-<!-- 基本情報 -->
-
 <div class="card">
 
 <div class="section-title">
@@ -154,26 +156,18 @@ textarea{
 </div>
 
 <label>運転手名</label>
-<input id="driver" oninput="saveForm()">
+<input id="driver">
 
 <label>車両番号</label>
-<input id="truck" oninput="saveForm()">
+<input id="truck">
 
 <label>元請け会社</label>
-<input
-type="text"
-id="contractor"
-placeholder="元請け名"
-oninput="saveForm()">
+<input id="contractor">
 
 <label>現場名</label>
-<input
-id="site"
-oninput="saveForm()">
+<input id="site">
 
 </div>
-
-<!-- 運行情報 -->
 
 <div class="card">
 
@@ -181,38 +175,25 @@ oninput="saveForm()">
 運行情報
 </div>
 
-<label>始業時距離数(km)</label>
-<input
-type="number"
-id="startKm"
-oninput="calcDistance();saveForm()">
+<label>始業時距離(km)</label>
+<input type="number" id="startKm">
 
-<label>終業時距離数(km)</label>
-<input
-type="number"
-id="endKm"
-oninput="calcDistance();saveForm()">
+<label>終業時距離(km)</label>
+<input type="number" id="endKm">
 
-<label>給油時距離数(km)</label>
-<input
-type="number"
-id="fuelKm"
-oninput="saveForm()">
+<label>給油時距離(km)</label>
+<input type="number" id="fuelKm">
 
 <label>給油量(L)</label>
-<input
-type="number"
-id="fuelLiter"
-oninput="saveForm()">
+<input type="number" id="fuelLiter">
 
 <div class="result-box">
 走行距離：
-<span id="distanceResult">0</span> km
+<span id="distanceResult">0</span>
+km
 </div>
 
 </div>
-
-<!-- 日常点検 -->
 
 <div class="card">
 
@@ -224,60 +205,50 @@ oninput="saveForm()">
 
 </div>
 
-<!-- 週次グリース -->
-
 <div class="card">
 
 <div class="section-title">
 週次グリース管理
 </div>
 
-<label>次回週次グリース予定日</label>
-
-<input
-type="date"
-id="greaseNext"
-oninput="saveForm()">
+<label>次回予定日</label>
+<input type="date" id="greaseNext">
 
 </div>
-
-<!-- 異常 -->
 
 <div
 class="card"
 id="memoArea"
-style="display:none;">
+style="display:none;"
+>
 
 <div class="section-title">
 異常報告
 </div>
 
 <label>異常内容</label>
-
-<textarea
-id="memo"
-oninput="saveForm()"></textarea>
+<textarea id="memo"></textarea>
 
 <label>異常写真</label>
-
 <input
 type="file"
-id="photo">
+id="photo"
+accept="image/*"
+capture="environment"
+>
 
 </div>
 
 </div>
-
-<!-- 送信 -->
 
 <div class="fixed-submit">
 
 <button
 class="submit-btn"
-onclick="sendData()">
-
+id="submitBtn"
+onclick="sendData()"
+>
 送信
-
 </button>
 
 </div>
@@ -287,12 +258,14 @@ onclick="sendData()">
 // Apps Script URL
 
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbyH9Q6l_Xz1IAd0athj3o2sdZEBiLpSXwsuXPv259cBRzMOuFl5cWnBWfP3_EGgBbE/exec";
+"ここをAppsScriptURLに変更";
 
-// QR車番自動入力
+// QR車番
 
 const params =
-new URLSearchParams(window.location.search);
+new URLSearchParams(
+window.location.search
+);
 
 const truckParam =
 params.get("truck");
@@ -323,8 +296,6 @@ const items = [
 
 ];
 
-// 点検状態
-
 let checks = {};
 
 const checksDiv =
@@ -332,7 +303,7 @@ document.getElementById("checks");
 
 // 点検生成
 
-items.forEach((item)=>{
+items.forEach(item=>{
 
   const div =
   document.createElement("div");
@@ -348,72 +319,47 @@ items.forEach((item)=>{
 
   <div class="check-buttons">
 
-    <button
-    type="button"
-    class="ok">
-    ○
-    </button>
+    <button class="ok">○</button>
 
-    <button
-    type="button"
-    class="ng">
-    ×
-    </button>
+    <button class="ng">×</button>
 
-    <button
-    type="button"
-    class="na">
-    該当なし
+    <button class="na">
+      該当なし
     </button>
 
   </div>
 
   `;
 
-  const okBtn =
-  div.querySelector(".ok");
+  const buttons =
+  div.querySelectorAll("button");
 
-  const ngBtn =
-  div.querySelector(".ng");
+  buttons[0].onclick =
+  ()=>setCheck(
+    item,
+    "OK",
+    buttons[0]
+  );
 
-  const naBtn =
-  div.querySelector(".na");
+  buttons[1].onclick =
+  ()=>setCheck(
+    item,
+    "NG",
+    buttons[1]
+  );
 
-  okBtn.onclick = ()=>{
-
-    setCheck(
-      item,
-      "OK",
-      okBtn
-    );
-
-  };
-
-  ngBtn.onclick = ()=>{
-
-    setCheck(
-      item,
-      "NG",
-      ngBtn
-    );
-
-  };
-
-  naBtn.onclick = ()=>{
-
-    setCheck(
-      item,
-      "該当なし",
-      naBtn
-    );
-
-  };
+  buttons[2].onclick =
+  ()=>setCheck(
+    item,
+    "該当なし",
+    buttons[2]
+  );
 
   checksDiv.appendChild(div);
 
 });
 
-// 点検状態設定
+// 状態設定
 
 function setCheck(
 item,
@@ -422,8 +368,6 @@ btn
 ){
 
   checks[item] = value;
-
-  saveForm();
 
   const parent =
   btn.parentElement;
@@ -442,61 +386,51 @@ btn
     "active"
   );
 
-  // NGなら異常欄表示
+  const hasNg =
+  Object.values(checks)
+  .includes("NG");
 
-  if(value==="NG"){
-
-    document
-    .getElementById(
-      "memoArea"
-    )
-    .style.display =
-    "block";
-
-  }
+  document
+  .getElementById(
+    "memoArea"
+  )
+  .style.display =
+  hasNg
+  ? "block"
+  : "none";
 
   // 週次グリース
 
   if(
-  item==="グリースアップ（週１項目）"
-  &&
-  value==="OK"
+    item ===
+    "グリースアップ（週１項目）"
+    &&
+    value === "OK"
   ){
 
-    const today =
+    const next =
     new Date();
 
-    today.setDate(
-      today.getDate()+7
+    next.setDate(
+      next.getDate()+7
     );
-
-    const yyyy =
-    today.getFullYear();
-
-    const mm =
-    String(
-      today.getMonth()+1
-    ).padStart(2,'0');
-
-    const dd =
-    String(
-      today.getDate()
-    ).padStart(2,'0');
 
     document
     .getElementById(
       "greaseNext"
     )
     .value =
-    `${yyyy}-${mm}-${dd}`;
-
-    saveForm();
+    next
+    .toISOString()
+    .split("T")[0];
 
   }
 
+  saveForm();
+
 }
 
-// 距離計算
+// 距離
 
 function calcDistance(){
 
@@ -516,181 +450,34 @@ function calcDistance(){
     ).value
   );
 
-  const distance =
-  end - start;
-
   document
   .getElementById(
     "distanceResult"
   )
   .innerText =
-  distance;
+  end - start;
 
 }
 
-// Base64変換
+// 入力監視
 
-function toBase64(file){
+document
+.querySelectorAll("input,textarea")
+.forEach(el=>{
 
-  return new Promise(
-  (resolve,reject)=>{
+  el.addEventListener(
+    "input",
+    ()=>{
 
-    const reader =
-    new FileReader();
+      calcDistance();
 
-    reader.readAsDataURL(
-      file
-    );
-
-    reader.onload = ()=>{
-
-      resolve(
-        reader.result
-        .split(",")[1]
-      );
-
-    };
-
-    reader.onerror =
-    error =>
-    reject(error);
-
-  });
-
-}
-
-// 送信
-
-async function sendData(){
-
-  const photoInput =
-  document.getElementById(
-    "photo"
-  );
-
-  let photoBase64 = "";
-  let photoName = "";
-  let photoType = "";
-
-  if(
-  photoInput.files.length > 0
-  ){
-
-    const file =
-    photoInput.files[0];
-
-    photoName =
-    file.name;
-
-    photoType =
-    file.type;
-
-    photoBase64 =
-    await toBase64(file);
-
-  }
-
-  const data = {
-
-    driver:
-    document
-    .getElementById(
-      "driver"
-    ).value,
-
-    truck:
-    document
-    .getElementById(
-      "truck"
-    ).value,
-
-    contractor:
-    document
-    .getElementById(
-      "contractor"
-    ).value,
-
-    site:
-    document
-    .getElementById(
-      "site"
-    ).value,
-
-    startKm:
-    document
-    .getElementById(
-      "startKm"
-    ).value,
-
-    endKm:
-    document
-    .getElementById(
-      "endKm"
-    ).value,
-
-    fuelKm:
-    document
-    .getElementById(
-      "fuelKm"
-    ).value,
-
-    fuelLiter:
-    document
-    .getElementById(
-      "fuelLiter"
-    ).value,
-
-    greaseNext:
-    document
-    .getElementById(
-      "greaseNext"
-    ).value,
-
-    memo:
-    document
-    .getElementById(
-      "memo"
-    ).value,
-
-    checks:checks,
-
-    photo:
-    photoBase64,
-
-    photoName:
-    photoName,
-
-    photoType:
-    photoType
-
-  };
-
-  await fetch(
-    SCRIPT_URL,
-    {
-
-      method:"POST",
-
-      headers:{
-        "Content-Type":
-        "text/plain;charset=utf-8"
-      },
-
-      body:
-      JSON.stringify(data)
+      saveForm();
 
     }
+
   );
 
-  alert("送信完了");
-
-  localStorage.removeItem(
-    "dumpInspection"
-  );
-
-  location.reload();
-
-}
+});
 
 // 自動保存
 
@@ -699,66 +486,36 @@ function saveForm(){
   const data = {
 
     driver:
-    document
-    .getElementById(
-      "driver"
-    ).value,
+    driver.value,
 
     truck:
-    document
-    .getElementById(
-      "truck"
-    ).value,
+    truck.value,
 
     contractor:
-    document
-    .getElementById(
-      "contractor"
-    ).value,
+    contractor.value,
 
     site:
-    document
-    .getElementById(
-      "site"
-    ).value,
+    site.value,
 
     startKm:
-    document
-    .getElementById(
-      "startKm"
-    ).value,
+    startKm.value,
 
     endKm:
-    document
-    .getElementById(
-      "endKm"
-    ).value,
+    endKm.value,
 
     fuelKm:
-    document
-    .getElementById(
-      "fuelKm"
-    ).value,
+    fuelKm.value,
 
     fuelLiter:
-    document
-    .getElementById(
-      "fuelLiter"
-    ).value,
+    fuelLiter.value,
 
     greaseNext:
-    document
-    .getElementById(
-      "greaseNext"
-    ).value,
+    greaseNext.value,
 
     memo:
-    document
-    .getElementById(
-      "memo"
-    ).value,
+    memo.value,
 
-    checks:checks
+    checks
 
   };
 
@@ -783,136 +540,304 @@ function loadForm(){
   const data =
   JSON.parse(saved);
 
-  document
-  .getElementById(
-    "driver"
-  ).value =
+  driver.value =
   data.driver || "";
 
-  document
-  .getElementById(
-    "truck"
-  ).value =
+  truck.value =
   data.truck || "";
 
-  document
-  .getElementById(
-    "contractor"
-  ).value =
+  contractor.value =
   data.contractor || "";
 
-  document
-  .getElementById(
-    "site"
-  ).value =
+  site.value =
   data.site || "";
 
-  document
-  .getElementById(
-    "startKm"
-  ).value =
+  startKm.value =
   data.startKm || "";
 
-  document
-  .getElementById(
-    "endKm"
-  ).value =
+  endKm.value =
   data.endKm || "";
 
-  document
-  .getElementById(
-    "fuelKm"
-  ).value =
+  fuelKm.value =
   data.fuelKm || "";
 
-  document
-  .getElementById(
-    "fuelLiter"
-  ).value =
+  fuelLiter.value =
   data.fuelLiter || "";
 
-  document
-  .getElementById(
-    "greaseNext"
-  ).value =
+  greaseNext.value =
   data.greaseNext || "";
 
-  document
-  .getElementById(
-    "memo"
-  ).value =
+  memo.value =
   data.memo || "";
 
-  if(data.checks){
+  checks =
+  data.checks || {};
 
-    checks =
-    data.checks;
+  // ボタン復元
 
-    document
-    .querySelectorAll(
-      ".check-item"
-    )
-    .forEach((div,index)=>{
+  document
+  .querySelectorAll(
+    ".check-item"
+  )
+  .forEach((div,index)=>{
 
-      const item =
-      items[index];
+    const item =
+    items[index];
 
-      const value =
-      checks[item];
+    const value =
+    checks[item];
 
-      if(!value) return;
+    if(!value) return;
 
-      const buttons =
-      div.querySelectorAll(
-        "button"
+    const buttons =
+    div.querySelectorAll(
+      "button"
+    );
+
+    if(value==="OK"){
+
+      buttons[0]
+      .classList.add(
+        "active"
       );
 
-      if(value==="OK"){
+    }
 
-        buttons[0]
-        .classList
-        .add("active");
+    if(value==="NG"){
 
-      }
+      buttons[1]
+      .classList.add(
+        "active"
+      );
 
-      if(value==="NG"){
+      memoArea.style.display =
+      "block";
 
-        buttons[1]
-        .classList
-        .add("active");
+    }
 
-        document
-        .getElementById(
-          "memoArea"
-        )
-        .style.display =
-        "block";
+    if(value==="該当なし"){
 
-      }
+      buttons[2]
+      .classList.add(
+        "active"
+      );
 
-      if(value==="該当なし"){
+    }
 
-        buttons[2]
-        .classList
-        .add("active");
-
-      }
-
-    });
-
-  }
+  });
 
   calcDistance();
 
 }
 
-// 起動時
+// 写真圧縮
 
-window.onload = ()=>{
+function toBase64(file){
 
-  loadForm();
+  return new Promise(
+  (resolve,reject)=>{
 
-};
+    const reader =
+    new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = e=>{
+
+      const img =
+      new Image();
+
+      img.src =
+      e.target.result;
+
+      img.onload = ()=>{
+
+        const canvas =
+        document.createElement(
+          "canvas"
+        );
+
+        let width =
+        img.width;
+
+        let height =
+        img.height;
+
+        const maxWidth =
+        800;
+
+        if(width > maxWidth){
+
+          height =
+          height *
+          (maxWidth/width);
+
+          width =
+          maxWidth;
+
+        }
+
+        canvas.width =
+        width;
+
+        canvas.height =
+        height;
+
+        const ctx =
+        canvas.getContext("2d");
+
+        ctx.drawImage(
+          img,
+          0,
+          0,
+          width,
+          height
+        );
+
+        const compressed =
+        canvas.toDataURL(
+          "image/jpeg",
+          0.3
+        );
+
+        resolve(
+          compressed
+          .split(",")[1]
+        );
+
+      };
+
+    };
+
+    reader.onerror =
+    reject;
+
+  });
+
+}
+
+// 送信
+
+async function sendData(){
+
+  const submitBtn =
+  document.getElementById(
+    "submitBtn"
+  );
+
+  submitBtn.disabled = true;
+
+  submitBtn.innerText =
+  "送信中...";
+
+  try{
+
+    let photo = "";
+    let photoName = "";
+    let photoType = "";
+
+    const photoFile =
+    photoInput.files[0];
+
+    if(photoFile){
+
+      photo =
+      await toBase64(
+        photoFile
+      );
+
+      photoName =
+      photoFile.name;
+
+      photoType =
+      "image/jpeg";
+
+    }
+
+    const data = {
+
+      driver:driver.value,
+      truck:truck.value,
+      contractor:contractor.value,
+      site:site.value,
+
+      startKm:startKm.value,
+      endKm:endKm.value,
+
+      fuelKm:fuelKm.value,
+      fuelLiter:fuelLiter.value,
+
+      greaseNext:
+      greaseNext.value,
+
+      memo:memo.value,
+
+      checks:checks,
+
+      photo:photo,
+      photoName:photoName,
+      photoType:photoType
+
+    };
+
+    const response =
+    await fetch(
+      SCRIPT_URL,
+      {
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+          "text/plain"
+        },
+
+        body:
+        JSON.stringify(data)
+
+      }
+    );
+
+    const result =
+    await response.json();
+
+    if(result.status !== "success"){
+
+      alert(
+        "送信失敗\n" +
+        result.message
+      );
+
+      return;
+
+    }
+
+    alert("送信完了");
+
+    localStorage.removeItem(
+      "dumpInspection"
+    );
+
+    location.reload();
+
+  }catch(error){
+
+    alert(
+      "通信エラー\n" +
+      error
+    );
+
+  }
+
+  submitBtn.disabled = false;
+
+  submitBtn.innerText =
+  "送信";
+
+}
+
+window.onload =
+loadForm;
 
 </script>
 
