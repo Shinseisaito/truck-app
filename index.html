@@ -50,7 +50,7 @@ label{
   font-weight:bold;
 }
 
-input, textarea{
+input,textarea{
   width:100%;
   box-sizing:border-box;
   padding:14px;
@@ -64,7 +64,7 @@ textarea{
   height:120px;
 }
 
-.check-group{
+.check-item{
   margin-bottom:25px;
 }
 
@@ -154,30 +154,22 @@ textarea{
 </div>
 
 <label>運転手名</label>
-<input id="driver"
-  oninput="saveForm()">
- 
+<input id="driver" oninput="saveForm()">
 
 <label>車両番号</label>
-<input id="truck"
-oninput="saveForm()">
-  
+<input id="truck" oninput="saveForm()">
 
-  <label>
-元請け会社
-</label>
-
+<label>元請け会社</label>
 <input
 type="text"
 id="contractor"
 placeholder="元請け名"
-  oninput="saveForm()">
- 
+oninput="saveForm()">
 
-  <label>現場名</label>
-<input id="site"
- oninput="saveForm()" >
-  
+<label>現場名</label>
+<input
+id="site"
+oninput="saveForm()">
 
 </div>
 
@@ -190,9 +182,10 @@ placeholder="元請け名"
 </div>
 
 <label>始業時距離数(km)</label>
-<input type="number" id="startKm"
- oninput="saveForm()">
-
+<input
+type="number"
+id="startKm"
+oninput="calcDistance();saveForm()">
 
 <label>終業時距離数(km)</label>
 <input
@@ -200,15 +193,17 @@ type="number"
 id="endKm"
 oninput="calcDistance();saveForm()">
 
-
 <label>給油時距離数(km)</label>
-<input type="number" id="fuelKm"
-   oninput="saveForm()">
-
+<input
+type="number"
+id="fuelKm"
+oninput="saveForm()">
 
 <label>給油量(L)</label>
-<input type="number" id="fuelLiter"
-   oninput="saveForm()">
+<input
+type="number"
+id="fuelLiter"
+oninput="saveForm()">
 
 <div class="result-box">
 走行距離：
@@ -217,7 +212,7 @@ oninput="calcDistance();saveForm()">
 
 </div>
 
-<!-- 点検 -->
+<!-- 日常点検 -->
 
 <div class="card">
 
@@ -238,6 +233,7 @@ oninput="calcDistance();saveForm()">
 </div>
 
 <label>次回週次グリース予定日</label>
+
 <input
 type="date"
 id="greaseNext"
@@ -247,17 +243,26 @@ oninput="saveForm()">
 
 <!-- 異常 -->
 
-<div class="card" id="memoArea" style="display:none;">
+<div
+class="card"
+id="memoArea"
+style="display:none;">
 
 <div class="section-title">
 異常報告
 </div>
 
 <label>異常内容</label>
-<textarea id="memo"></textarea>
+
+<textarea
+id="memo"
+oninput="saveForm()"></textarea>
 
 <label>異常写真</label>
-<input type="file" id="photo">
+
+<input
+type="file"
+id="photo">
 
 </div>
 
@@ -267,9 +272,12 @@ oninput="saveForm()">
 
 <div class="fixed-submit">
 
-<button class="submit-btn"
+<button
+class="submit-btn"
 onclick="sendData()">
+
 送信
+
 </button>
 
 </div>
@@ -315,10 +323,14 @@ const items = [
 
 ];
 
+// 点検状態
+
+let checks = {};
+
 const checksDiv =
 document.getElementById("checks");
 
-let checks = {};
+// 点検生成
 
 items.forEach((item)=>{
 
@@ -336,16 +348,22 @@ items.forEach((item)=>{
 
   <div class="check-buttons">
 
-    <button type="button" class="ok">
-      ○
+    <button
+    type="button"
+    class="ok">
+    ○
     </button>
 
-    <button type="button" class="ng">
-      ×
+    <button
+    type="button"
+    class="ng">
+    ×
     </button>
 
-    <button type="button" class="na">
-      該当なし
+    <button
+    type="button"
+    class="na">
+    該当なし
     </button>
 
   </div>
@@ -363,52 +381,31 @@ items.forEach((item)=>{
 
   okBtn.onclick = ()=>{
 
-    checks[item] = "OK";
-
-    saveForm();
-
-    okBtn.style.background =
-    "#16a34a";
-
-    ngBtn.style.background =
-    "#fff";
-
-    naBtn.style.background =
-    "#fff";
+    setCheck(
+      item,
+      "OK",
+      okBtn
+    );
 
   };
 
   ngBtn.onclick = ()=>{
 
-    checks[item] = "NG";
-
-    saveForm();
-
-    ngBtn.style.background =
-    "#dc2626";
-
-    okBtn.style.background =
-    "#fff";
-
-    naBtn.style.background =
-    "#fff";
+    setCheck(
+      item,
+      "NG",
+      ngBtn
+    );
 
   };
 
   naBtn.onclick = ()=>{
 
-    checks[item] = "該当なし";
-
-    saveForm();
-
-    naBtn.style.background =
-    "#6b7280";
-
-    okBtn.style.background =
-    "#fff";
-
-    ngBtn.style.background =
-    "#fff";
+    setCheck(
+      item,
+      "該当なし",
+      naBtn
+    );
 
   };
 
@@ -416,81 +413,149 @@ items.forEach((item)=>{
 
 });
 
-// 点検状態
+// 点検状態設定
 
-function setCheck(item,value,btn){
+function setCheck(
+item,
+value,
+btn
+){
 
   checks[item] = value;
+
   saveForm();
 
   const parent =
   btn.parentElement;
 
-  parent.querySelectorAll("button")
-  .forEach(b=>b.classList.remove("active"));
+  parent
+  .querySelectorAll("button")
+  .forEach(b=>{
 
-  btn.classList.add("active");
+    b.classList.remove(
+      "active"
+    );
+
+  });
+
+  btn.classList.add(
+    "active"
+  );
 
   // NGなら異常欄表示
 
   if(value==="NG"){
 
     document
-    .getElementById("memoArea")
-    .style.display = "block";
+    .getElementById(
+      "memoArea"
+    )
+    .style.display =
+    "block";
 
   }
 
-  // 週次グリースなら7日後
+  // 週次グリース
 
-if(
-item==="グリースアップ（週１項目）"
-&& value==="OK"
-){
+  if(
+  item==="グリースアップ（週１項目）"
+  &&
+  value==="OK"
+  ){
 
-    const today = new Date();
+    const today =
+    new Date();
 
-    today.setDate(today.getDate()+7);
+    today.setDate(
+      today.getDate()+7
+    );
 
     const yyyy =
     today.getFullYear();
 
     const mm =
-    String(today.getMonth()+1)
-    .padStart(2,'0');
+    String(
+      today.getMonth()+1
+    ).padStart(2,'0');
 
     const dd =
-    String(today.getDate())
-    .padStart(2,'0');
+    String(
+      today.getDate()
+    ).padStart(2,'0');
 
     document
-    .getElementById("greaseNext")
-    .value = `${yyyy}-${mm}-${dd}`;
+    .getElementById(
+      "greaseNext"
+    )
+    .value =
+    `${yyyy}-${mm}-${dd}`;
+
+    saveForm();
 
   }
 
 }
 
-// 走行距離計算
+// 距離計算
 
 function calcDistance(){
 
   const start =
-  Number(document
-  .getElementById("startKm")
-  .value);
+  Number(
+    document
+    .getElementById(
+      "startKm"
+    ).value
+  );
 
   const end =
-  Number(document
-  .getElementById("endKm")
-  .value);
+  Number(
+    document
+    .getElementById(
+      "endKm"
+    ).value
+  );
 
   const distance =
   end - start;
 
   document
-  .getElementById("distanceResult")
-  .innerText = distance;
+  .getElementById(
+    "distanceResult"
+  )
+  .innerText =
+  distance;
+
+}
+
+// Base64変換
+
+function toBase64(file){
+
+  return new Promise(
+  (resolve,reject)=>{
+
+    const reader =
+    new FileReader();
+
+    reader.readAsDataURL(
+      file
+    );
+
+    reader.onload = ()=>{
+
+      resolve(
+        reader.result
+        .split(",")[1]
+      );
+
+    };
+
+    reader.onerror =
+    error =>
+    reject(error);
+
+  });
 
 }
 
@@ -498,22 +563,27 @@ function calcDistance(){
 
 async function sendData(){
 
-  // 写真取得
-
   const photoInput =
-  document.getElementById("photo");
+  document.getElementById(
+    "photo"
+  );
 
   let photoBase64 = "";
   let photoName = "";
   let photoType = "";
 
-  if(photoInput.files.length > 0){
+  if(
+  photoInput.files.length > 0
+  ){
 
     const file =
     photoInput.files[0];
 
-    photoName = file.name;
-    photoType = file.type;
+    photoName =
+    file.name;
+
+    photoType =
+    file.type;
 
     photoBase64 =
     await toBase64(file);
@@ -523,136 +593,105 @@ async function sendData(){
   const data = {
 
     driver:
-    document.getElementById("driver").value,
+    document
+    .getElementById(
+      "driver"
+    ).value,
 
     truck:
-    document.getElementById("truck").value,
+    document
+    .getElementById(
+      "truck"
+    ).value,
 
     contractor:
-document.getElementById(
-  "contractor"
-).value,
+    document
+    .getElementById(
+      "contractor"
+    ).value,
 
     site:
-    document.getElementById("site").value,
+    document
+    .getElementById(
+      "site"
+    ).value,
 
     startKm:
-    document.getElementById("startKm").value,
+    document
+    .getElementById(
+      "startKm"
+    ).value,
 
     endKm:
-    document.getElementById("endKm").value,
+    document
+    .getElementById(
+      "endKm"
+    ).value,
 
     fuelKm:
-    document.getElementById("fuelKm").value,
+    document
+    .getElementById(
+      "fuelKm"
+    ).value,
 
     fuelLiter:
-    document.getElementById("fuelLiter").value,
+    document
+    .getElementById(
+      "fuelLiter"
+    ).value,
 
     greaseNext:
-    document.getElementById("greaseNext").value,
+    document
+    .getElementById(
+      "greaseNext"
+    ).value,
 
     memo:
-    document.getElementById("memo").value,
+    document
+    .getElementById(
+      "memo"
+    ).value,
 
     checks:checks,
 
-    // 写真
+    photo:
+    photoBase64,
 
-    photo:photoBase64,
+    photoName:
+    photoName,
 
-    photoName:photoName,
-
-    photoType:photoType
+    photoType:
+    photoType
 
   };
 
-  await fetch(SCRIPT_URL, {
+  await fetch(
+    SCRIPT_URL,
+    {
 
-    method:"POST",
+      method:"POST",
 
-    headers:{
-      "Content-Type":
-      "text/plain;charset=utf-8"
-    },
+      headers:{
+        "Content-Type":
+        "text/plain;charset=utf-8"
+      },
 
-    body:JSON.stringify(data)
+      body:
+      JSON.stringify(data)
 
-  });
+    }
+  );
 
-alert("送信完了");
+  alert("送信完了");
 
-localStorage.removeItem(
-  "dumpInspection"
-);
+  localStorage.removeItem(
+    "dumpInspection"
+  );
 
-location.reload();
-
-}
-
-function toBase64(file){
-
-  return new Promise((resolve,reject)=>{
-
-    const img = new Image();
-
-    const reader = new FileReader();
-
-    reader.readAsDataURL(file);
-
-    reader.onload = event => {
-
-      img.src = event.target.result;
-
-    };
-
-    img.onload = ()=>{
-
-      const canvas =
-      document.createElement("canvas");
-
-      // 圧縮サイズ
-
-      const maxWidth = 1200;
-
-      const scale =
-      maxWidth / img.width;
-
-      canvas.width = maxWidth;
-
-      canvas.height =
-      img.height * scale;
-
-      const ctx =
-      canvas.getContext("2d");
-
-      ctx.drawImage(
-        img,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-
-      // jpeg圧縮
-
-      const compressed =
-      canvas.toDataURL(
-        "image/jpeg",
-        0.6
-      );
-
-      resolve(
-        compressed.split(",")[1]
-      );
-
-    };
-
-    reader.onerror = error =>
-    reject(error);
-
-  });
+  location.reload();
 
 }
+
 // 自動保存
 
 function saveForm(){
@@ -660,34 +699,64 @@ function saveForm(){
   const data = {
 
     driver:
-    document.getElementById("driver").value,
+    document
+    .getElementById(
+      "driver"
+    ).value,
 
     truck:
-    document.getElementById("truck").value,
+    document
+    .getElementById(
+      "truck"
+    ).value,
 
     contractor:
-    document.getElementById("contractor").value,
+    document
+    .getElementById(
+      "contractor"
+    ).value,
 
     site:
-    document.getElementById("site").value,
+    document
+    .getElementById(
+      "site"
+    ).value,
 
     startKm:
-    document.getElementById("startKm").value,
+    document
+    .getElementById(
+      "startKm"
+    ).value,
 
     endKm:
-    document.getElementById("endKm").value,
+    document
+    .getElementById(
+      "endKm"
+    ).value,
 
     fuelKm:
-    document.getElementById("fuelKm").value,
+    document
+    .getElementById(
+      "fuelKm"
+    ).value,
 
     fuelLiter:
-    document.getElementById("fuelLiter").value,
+    document
+    .getElementById(
+      "fuelLiter"
+    ).value,
 
     greaseNext:
-    document.getElementById("greaseNext").value,
+    document
+    .getElementById(
+      "greaseNext"
+    ).value,
 
     memo:
-    document.getElementById("memo").value,
+    document
+    .getElementById(
+      "memo"
+    ).value,
 
     checks:checks
 
@@ -714,120 +783,137 @@ function loadForm(){
   const data =
   JSON.parse(saved);
 
-  document.getElementById("driver").value =
+  document
+  .getElementById(
+    "driver"
+  ).value =
   data.driver || "";
 
-  document.getElementById("truck").value =
+  document
+  .getElementById(
+    "truck"
+  ).value =
   data.truck || "";
 
-  document.getElementById("contractor").value =
+  document
+  .getElementById(
+    "contractor"
+  ).value =
   data.contractor || "";
 
-  document.getElementById("site").value =
+  document
+  .getElementById(
+    "site"
+  ).value =
   data.site || "";
 
-  document.getElementById("startKm").value =
+  document
+  .getElementById(
+    "startKm"
+  ).value =
   data.startKm || "";
 
-  document.getElementById("endKm").value =
+  document
+  .getElementById(
+    "endKm"
+  ).value =
   data.endKm || "";
 
-  document.getElementById("fuelKm").value =
+  document
+  .getElementById(
+    "fuelKm"
+  ).value =
   data.fuelKm || "";
 
-  document.getElementById("fuelLiter").value =
+  document
+  .getElementById(
+    "fuelLiter"
+  ).value =
   data.fuelLiter || "";
 
-  document.getElementById("greaseNext").value =
+  document
+  .getElementById(
+    "greaseNext"
+  ).value =
   data.greaseNext || "";
 
-  document.getElementById("memo").value =
+  document
+  .getElementById(
+    "memo"
+  ).value =
   data.memo || "";
 
   if(data.checks){
 
-    checks = data.checks;
-    // ボタン状態復元
-
-document
-.querySelectorAll(".check-item")
-.forEach((div,index)=>{
-
-  const item = items[index];
-
-  const value =
-  checks[item];
-
-  if(!value) return;
-
-  const buttons =
-  div.querySelectorAll("button");
-
-  buttons.forEach(btn=>{
-
-    btn.classList.remove(
-      "active"
-    );
-
-    btn.style.background =
-    "#d1d5db";
-
-  });
-
-  if(value==="OK"){
-
-    buttons[0].classList.add(
-      "active"
-    );
-
-    buttons[0].style.background =
-    "#16a34a";
-
-  }
-
-  if(value==="NG"){
-
-    buttons[1].classList.add(
-      "active"
-    );
-
-    buttons[1].style.background =
-    "#dc2626";
+    checks =
+    data.checks;
 
     document
-    .getElementById(
-      "memoArea"
+    .querySelectorAll(
+      ".check-item"
     )
-    .style.display =
-    "block";
+    .forEach((div,index)=>{
+
+      const item =
+      items[index];
+
+      const value =
+      checks[item];
+
+      if(!value) return;
+
+      const buttons =
+      div.querySelectorAll(
+        "button"
+      );
+
+      if(value==="OK"){
+
+        buttons[0]
+        .classList
+        .add("active");
+
+      }
+
+      if(value==="NG"){
+
+        buttons[1]
+        .classList
+        .add("active");
+
+        document
+        .getElementById(
+          "memoArea"
+        )
+        .style.display =
+        "block";
+
+      }
+
+      if(value==="該当なし"){
+
+        buttons[2]
+        .classList
+        .add("active");
+
+      }
+
+    });
 
   }
 
-  if(value==="該当なし"){
+  calcDistance();
 
-    buttons[2].classList.add(
-      "active"
-    );
+}
 
-    buttons[2].style.background =
-    "#6b7280";
-
-  }
-
-});
-
-  }
-
-
-// 起動時復元
+// 起動時
 
 window.onload = ()=>{
 
   loadForm();
 
-  calcDistance();
-
 };
+
 </script>
 
 </body>
