@@ -719,40 +719,33 @@ async function sendData(){
 
     };
 
-    const response =
-    await fetch(
-      SCRIPT_URL,
-      {
+   const response =
+await fetch(
+  SCRIPT_URL,
+  {
+    method:"POST",
+    headers:{
+      "Content-Type":"text/plain"
+    },
+    body:JSON.stringify(data)
+  }
+);
 
-        method:"POST",
+const result =
+await response.text();
 
-        headers:{
-          "Content-Type":
-          "text/plain"
-        },
+if(result !== "OK"){
 
-        body:
-        JSON.stringify(data)
+  alert(
+    "送信失敗\n" + result
+  );
 
-      }
-    );
+  return;
 
-    const result =
-    await response.json();
+}
 
-    if(
-      result.status !==
-      "success"
-    ){
-
-      throw new Error(
-        result.message
-      );
-
-    }
-
-    alert("送信完了");
-
+alert("送信完了");
+    
     localStorage.removeItem(
       "dumpInspection"
     );
