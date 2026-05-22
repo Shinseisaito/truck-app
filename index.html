@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>トラック運搬管理システム</title>
 
@@ -18,11 +18,11 @@ body{
 
 .header{
   background:#111827;
-  color:white;
+  color:#fff;
   padding:20px;
+  text-align:center;
   font-size:24px;
   font-weight:bold;
-  text-align:center;
 }
 
 .container{
@@ -30,7 +30,7 @@ body{
 }
 
 .card{
-  background:white;
+  background:#fff;
   border-radius:16px;
   padding:20px;
   margin-bottom:20px;
@@ -65,7 +65,7 @@ textarea{
 }
 
 .check-item{
-  margin-bottom:24px;
+  margin-bottom:25px;
 }
 
 .check-title{
@@ -81,26 +81,26 @@ textarea{
 
 .check-buttons button{
   flex:1;
-  padding:16px;
   border:none;
   border-radius:12px;
+  padding:16px;
   font-size:18px;
   font-weight:bold;
   background:#d1d5db;
 }
 
-.ok.active{
-  background:#16a34a;
+.active-ok{
+  background:#16a34a !important;
   color:white;
 }
 
-.ng.active{
-  background:#dc2626;
+.active-ng{
+  background:#dc2626 !important;
   color:white;
 }
 
-.na.active{
-  background:#6b7280;
+.active-na{
+  background:#6b7280 !important;
   color:white;
 }
 
@@ -114,8 +114,8 @@ textarea{
 
 .fixed-submit{
   position:fixed;
-  bottom:0;
   left:0;
+  bottom:0;
   width:100%;
   background:white;
   padding:15px;
@@ -175,10 +175,10 @@ textarea{
 運行情報
 </div>
 
-<label>始業時距離(km)</label>
+<label>始業距離(km)</label>
 <input type="number" id="startKm">
 
-<label>終業時距離(km)</label>
+<label>終業距離(km)</label>
 <input type="number" id="endKm">
 
 <label>給油時距離(km)</label>
@@ -208,7 +208,7 @@ km
 <div class="card">
 
 <div class="section-title">
-週次グリース管理
+週次グリース
 </div>
 
 <label>次回予定日</label>
@@ -255,30 +255,8 @@ onclick="sendData()"
 
 <script>
 
-// Apps Script URL
-
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbyH9Q6l_Xz1IAd0athj3o2sdZEBiLpSXwsuXPv259cBRzMOuFl5cWnBWfP3_EGgBbE/exec";
-
-// QR車番
-
-const params =
-new URLSearchParams(
-window.location.search
-);
-
-const truckParam =
-params.get("truck");
-
-if(truckParam){
-
-  document
-  .getElementById("truck")
-  .value = truckParam;
-
-}
-
-// 点検項目
+"ここをAppsScriptURLに変更";
 
 const items = [
 
@@ -301,8 +279,6 @@ let checks = {};
 const checksDiv =
 document.getElementById("checks");
 
-// 点検生成
-
 items.forEach(item=>{
 
   const div =
@@ -319,11 +295,15 @@ items.forEach(item=>{
 
   <div class="check-buttons">
 
-    <button class="ok" type="button">
+    <button type="button">
+      ○
+    </button>
 
-    <button class="ng" type="button">
+    <button type="button">
+      ×
+    </button>
 
-    <button class="na" type="button">
+    <button type="button">
       該当なし
     </button>
 
@@ -338,33 +318,35 @@ items.forEach(item=>{
   ()=>setCheck(
     item,
     "OK",
-    buttons[0]
+    buttons[0],
+    "active-ok"
   );
 
   buttons[1].onclick =
   ()=>setCheck(
     item,
     "NG",
-    buttons[1]
+    buttons[1],
+    "active-ng"
   );
 
   buttons[2].onclick =
   ()=>setCheck(
     item,
     "該当なし",
-    buttons[2]
+    buttons[2],
+    "active-na"
   );
 
   checksDiv.appendChild(div);
 
 });
 
-// 状態設定
-
 function setCheck(
 item,
 value,
-btn
+btn,
+className
 ){
 
   checks[item] = value;
@@ -377,29 +359,25 @@ btn
   .forEach(b=>{
 
     b.classList.remove(
-      "active"
+      "active-ok",
+      "active-ng",
+      "active-na"
     );
 
   });
 
-  btn.classList.add(
-    "active"
-  );
+  btn.classList.add(className);
 
   const hasNg =
   Object.values(checks)
   .includes("NG");
 
   document
-  .getElementById(
-    "memoArea"
-  )
+  .getElementById("memoArea")
   .style.display =
   hasNg
   ? "block"
   : "none";
-
-  // 週次グリース
 
   if(
     item ===
@@ -415,29 +393,19 @@ btn
       next.getDate()+7
     );
 
-document
-.getElementById(
-  "greaseNext"
-)
-.value =
-next
-const yyyy =
-next.getFullYear();
+    const yyyy =
+    next.getFullYear();
 
-const mm =
-String(next.getMonth()+1)
-.padStart(2,"0");
+    const mm =
+    String(next.getMonth()+1)
+    .padStart(2,"0");
 
-const dd =
-String(next.getDate())
-.padStart(2,"0");
+    const dd =
+    String(next.getDate())
+    .padStart(2,"0");
 
-document
-.getElementById(
-  "greaseNext"
-)
-.value =
-`${yyyy}-${mm}-${dd}`;
+    greaseNext.value =
+    `${yyyy}-${mm}-${dd}`;
 
   }
 
@@ -445,36 +413,18 @@ document
 
 }
 
-// 距離
-
 function calcDistance(){
 
   const start =
-  Number(
-    document
-    .getElementById(
-      "startKm"
-    ).value
-  );
+  Number(startKm.value || 0);
 
   const end =
-  Number(
-    document
-    .getElementById(
-      "endKm"
-    ).value
-  );
+  Number(endKm.value || 0);
 
-  document
-  .getElementById(
-    "distanceResult"
-  )
-  .innerText =
+  distanceResult.innerText =
   end - start;
 
 }
-
-// 入力監視
 
 document
 .querySelectorAll("input,textarea")
@@ -489,48 +439,30 @@ document
       saveForm();
 
     }
-
   );
 
 });
-
-// 自動保存
 
 function saveForm(){
 
   const data = {
 
-    driver:
-    driver.value,
+    driver:driver.value,
+    truck:truck.value,
+    contractor:contractor.value,
+    site:site.value,
 
-    truck:
-    truck.value,
+    startKm:startKm.value,
+    endKm:endKm.value,
 
-    contractor:
-    contractor.value,
+    fuelKm:fuelKm.value,
+    fuelLiter:fuelLiter.value,
 
-    site:
-    site.value,
+    greaseNext:greaseNext.value,
 
-    startKm:
-    startKm.value,
+    memo:memo.value,
 
-    endKm:
-    endKm.value,
-
-    fuelKm:
-    fuelKm.value,
-
-    fuelLiter:
-    fuelLiter.value,
-
-    greaseNext:
-    greaseNext.value,
-
-    memo:
-    memo.value,
-
-    checks
+    checks:checks
 
   };
 
@@ -540,8 +472,6 @@ function saveForm(){
   );
 
 }
-
-// 復元
 
 function loadForm(){
 
@@ -588,12 +518,8 @@ function loadForm(){
   checks =
   data.checks || {};
 
-  // ボタン復元
-
   document
-  .querySelectorAll(
-    ".check-item"
-  )
+  .querySelectorAll(".check-item")
   .forEach((div,index)=>{
 
     const item =
@@ -605,15 +531,13 @@ function loadForm(){
     if(!value) return;
 
     const buttons =
-    div.querySelectorAll(
-      "button"
-    );
+    div.querySelectorAll("button");
 
     if(value==="OK"){
 
       buttons[0]
       .classList.add(
-        "active"
+        "active-ok"
       );
 
     }
@@ -622,7 +546,7 @@ function loadForm(){
 
       buttons[1]
       .classList.add(
-        "active"
+        "active-ng"
       );
 
       memoArea.style.display =
@@ -634,7 +558,7 @@ function loadForm(){
 
       buttons[2]
       .classList.add(
-        "active"
+        "active-na"
       );
 
     }
@@ -645,9 +569,7 @@ function loadForm(){
 
 }
 
-// 写真圧縮
-
-function toBase64(file){
+async function toBase64(file){
 
   return new Promise(
   (resolve,reject)=>{
@@ -679,7 +601,7 @@ function toBase64(file){
         img.height;
 
         const maxWidth =
-        800;
+        1200;
 
         if(width > maxWidth){
 
@@ -709,15 +631,14 @@ function toBase64(file){
           height
         );
 
-        const compressed =
+        const base64 =
         canvas.toDataURL(
           "image/jpeg",
-          0.3
+          0.5
         );
 
         resolve(
-          compressed
-          .split(",")[1]
+          base64.split(",")[1]
         );
 
       };
@@ -730,8 +651,6 @@ function toBase64(file){
   });
 
 }
-
-// 送信
 
 async function sendData(){
 
@@ -747,8 +666,6 @@ async function sendData(){
 
   try{
 
-    // ↓これ追加
-
     const photoInput =
     document.getElementById(
       "photo"
@@ -758,18 +675,19 @@ async function sendData(){
     let photoName = "";
     let photoType = "";
 
-    const photoFile =
-    photoInput.files[0];
+    if(
+      photoInput.files &&
+      photoInput.files[0]
+    ){
 
-    if(photoFile){
+      const file =
+      photoInput.files[0];
 
       photo =
-      await toBase64(
-        photoFile
-      );
+      await toBase64(file);
 
       photoName =
-      photoFile.name;
+      file.name;
 
       photoType =
       "image/jpeg";
@@ -789,8 +707,7 @@ async function sendData(){
       fuelKm:fuelKm.value,
       fuelLiter:fuelLiter.value,
 
-      greaseNext:
-      greaseNext.value,
+      greaseNext:greaseNext.value,
 
       memo:memo.value,
 
@@ -823,14 +740,14 @@ async function sendData(){
     const result =
     await response.json();
 
-    if(result.status !== "success"){
+    if(
+      result.status !==
+      "success"
+    ){
 
-      alert(
-        "送信失敗\n" +
+      throw new Error(
         result.message
       );
-
-      return;
 
     }
 
@@ -845,7 +762,7 @@ async function sendData(){
   }catch(error){
 
     alert(
-      "通信エラー\n" +
+      "通信エラー\n\n" +
       error
     );
 
