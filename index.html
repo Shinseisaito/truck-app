@@ -238,7 +238,10 @@ oninput="calcDistance();saveForm()">
 </div>
 
 <label>次回週次グリース予定日</label>
-<input type="date" id="greaseNext">
+<input
+type="date"
+id="greaseNext"
+oninput="saveForm()">
 
 </div>
 
@@ -440,8 +443,10 @@ function setCheck(item,value,btn){
 
   // 週次グリースなら7日後
 
-  if(item==="グリースアップ（週1）"
-  && value==="OK"){
+if(
+item==="グリースアップ（週１項目）"
+&& value==="OK"
+){
 
     const today = new Date();
 
@@ -742,16 +747,85 @@ function loadForm(){
   if(data.checks){
 
     checks = data.checks;
+    // ボタン状態復元
+
+document
+.querySelectorAll(".check-item")
+.forEach((div,index)=>{
+
+  const item = items[index];
+
+  const value =
+  checks[item];
+
+  if(!value) return;
+
+  const buttons =
+  div.querySelectorAll("button");
+
+  buttons.forEach(btn=>{
+
+    btn.classList.remove(
+      "active"
+    );
+
+    btn.style.background =
+    "#d1d5db";
+
+  });
+
+  if(value==="OK"){
+
+    buttons[0].classList.add(
+      "active"
+    );
+
+    buttons[0].style.background =
+    "#16a34a";
 
   }
 
-}
+  if(value==="NG"){
+
+    buttons[1].classList.add(
+      "active"
+    );
+
+    buttons[1].style.background =
+    "#dc2626";
+
+    document
+    .getElementById(
+      "memoArea"
+    )
+    .style.display =
+    "block";
+
+  }
+
+  if(value==="該当なし"){
+
+    buttons[2].classList.add(
+      "active"
+    );
+
+    buttons[2].style.background =
+    "#6b7280";
+
+  }
+
+});
+
+  }
+
 
 // 起動時復元
 
 window.onload = ()=>{
 
   loadForm();
+
+  calcDistance();
 
 };
 </script>
