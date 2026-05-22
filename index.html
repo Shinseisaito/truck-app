@@ -318,53 +318,99 @@ document.getElementById("checks");
 
 // 点検生成
 
-items.forEach(item=>{
+items.forEach((item)=>{
 
   const div =
   document.createElement("div");
 
-  div.className = "check-group";
+  div.className =
+  "check-item";
 
- div.innerHTML = `
+  div.innerHTML = `
 
-<div class="check-title">
-${item}
-</div>
+  <div class="check-title">
+    ${item}
+  </div>
 
-<div class="check-buttons">
+  <div class="check-buttons">
 
-  <button type="button" class="ok">
-  ○
-  </button>
+    <button type="button" class="ok">
+      ○
+    </button>
 
-  <button type="button" class="ng">
-  ×
-  </button>
+    <button type="button" class="ng">
+      ×
+    </button>
 
-  <button type="button" class="na">
-  該当なし
-  </button>
+    <button type="button" class="na">
+      該当なし
+    </button>
 
-</div>
+  </div>
 
-`;
+  `;
 
-  const buttons =
-  div.querySelectorAll("button");
+  const okBtn =
+  div.querySelector(".ok");
 
-  buttons[0].onclick = ()=>{
-    setCheck(item,"OK",buttons[0]);
+  const ngBtn =
+  div.querySelector(".ng");
+
+  const naBtn =
+  div.querySelector(".na");
+
+  okBtn.onclick = ()=>{
+
+    checks[item] = "○";
+
+    saveForm();
+
+    okBtn.style.background =
+    "#16a34a";
+
+    ngBtn.style.background =
+    "#fff";
+
+    naBtn.style.background =
+    "#fff";
+
   };
 
-  buttons[1].onclick = ()=>{
-    setCheck(item,"NG",buttons[1]);
+  ngBtn.onclick = ()=>{
+
+    checks[item] = "×";
+
+    saveForm();
+
+    ngBtn.style.background =
+    "#dc2626";
+
+    okBtn.style.background =
+    "#fff";
+
+    naBtn.style.background =
+    "#fff";
+
   };
 
-  buttons[2].onclick = ()=>{
-    setCheck(item,"該当なし",buttons[2]);
+  naBtn.onclick = ()=>{
+
+    checks[item] = "該当なし";
+
+    saveForm();
+
+    naBtn.style.background =
+    "#6b7280";
+
+    okBtn.style.background =
+    "#fff";
+
+    ngBtn.style.background =
+    "#fff";
+
   };
 
-  checksDiv.appendChild(div);
+  checksArea.appendChild(div);
 
 });
 
