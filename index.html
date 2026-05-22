@@ -311,7 +311,6 @@ const items = [
 "アルコール"
 
 ];
-let checks = {};
 
 const checksDiv =
 document.getElementById("checks");
@@ -365,6 +364,15 @@ items.forEach((item)=>{
 
     saveForm();
 
+    okBtn.style.background =
+    "#16a34a";
+
+    ngBtn.style.background =
+    "#fff";
+
+    naBtn.style.background =
+    "#fff";
+
   };
 
   ngBtn.onclick = ()=>{
@@ -373,6 +381,15 @@ items.forEach((item)=>{
 
     saveForm();
 
+    ngBtn.style.background =
+    "#dc2626";
+
+    okBtn.style.background =
+    "#fff";
+
+    naBtn.style.background =
+    "#fff";
+
   };
 
   naBtn.onclick = ()=>{
@@ -380,6 +397,15 @@ items.forEach((item)=>{
     checks[item] = "該当なし";
 
     saveForm();
+
+    naBtn.style.background =
+    "#6b7280";
+
+    okBtn.style.background =
+    "#fff";
+
+    ngBtn.style.background =
+    "#fff";
 
   };
 
