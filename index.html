@@ -258,7 +258,7 @@ onclick="sendData()"
 // Apps Script URL
 
 const SCRIPT_URL =
-"ここをAppsScriptURLに変更";
+"https://script.google.com/macros/s/AKfycbyH9Q6l_Xz1IAd0athj3o2sdZEBiLpSXwsuXPv259cBRzMOuFl5cWnBWfP3_EGgBbE/exec";
 
 // QR車番
 
@@ -319,11 +319,11 @@ items.forEach(item=>{
 
   <div class="check-buttons">
 
-    <button class="ok">○</button>
+    <button class="ok" type="button">
 
-    <button class="ng">×</button>
+    <button class="ng" type="button">
 
-    <button class="na">
+    <button class="na" type="button">
       該当なし
     </button>
 
@@ -421,8 +421,23 @@ document
 )
 .value =
 next
-.toISOString()
-.split("T")[0];
+const yyyy =
+next.getFullYear();
+
+const mm =
+String(next.getMonth()+1)
+.padStart(2,"0");
+
+const dd =
+String(next.getDate())
+.padStart(2,"0");
+
+document
+.getElementById(
+  "greaseNext"
+)
+.value =
+`${yyyy}-${mm}-${dd}`;
 
   }
 
