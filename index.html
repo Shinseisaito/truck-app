@@ -155,9 +155,11 @@ textarea{
 
 <label>運転手名</label>
 <input id="driver">
+  oninput="saveForm()"
 
 <label>車両番号</label>
 <input id="truck">
+  oninput="saveForm()"
 
   <label>
 元請け会社
@@ -168,9 +170,11 @@ type="text"
 id="contractor"
 placeholder="元請け名"
 >
+  oninput="saveForm()"
 
   <label>現場名</label>
 <input id="site">
+  oninput="saveForm()"
 
 </div>
 
@@ -184,17 +188,20 @@ placeholder="元請け名"
 
 <label>始業時距離数(km)</label>
 <input type="number" id="startKm">
+  oninput="saveForm()"
 
 <label>終業時距離数(km)</label>
 <input type="number" id="endKm"
 oninput="calcDistance()">
+  oninput="saveForm()"
 
 <label>給油時距離数(km)</label>
 <input type="number" id="fuelKm">
+  .oninput="saveForm()"
 
 <label>給油量(L)</label>
 <input type="number" id="fuelLiter">
-
+oninput="saveForm()"
 <div class="result-box">
 走行距離：
 <span id="distanceResult">0</span> km
@@ -359,6 +366,7 @@ ${item}
 function setCheck(item,value,btn){
 
   checks[item] = value;
+  saveForm();
 
   const parent =
   btn.parentElement;
@@ -516,6 +524,10 @@ document.getElementById(
 
   alert("送信完了");
 
+  localStorage.removeItem(
+  "dumpInspection"
+);
+
 }
 
 function toBase64(file){
@@ -582,6 +594,112 @@ function toBase64(file){
   });
 
 }
+// 自動保存
+
+function saveForm(){
+
+  const data = {
+
+    driver:
+    document.getElementById("driver").value,
+
+    truck:
+    document.getElementById("truck").value,
+
+    contractor:
+    document.getElementById("contractor").value,
+
+    site:
+    document.getElementById("site").value,
+
+    startKm:
+    document.getElementById("startKm").value,
+
+    endKm:
+    document.getElementById("endKm").value,
+
+    fuelKm:
+    document.getElementById("fuelKm").value,
+
+    fuelLiter:
+    document.getElementById("fuelLiter").value,
+
+    greaseNext:
+    document.getElementById("greaseNext").value,
+
+    memo:
+    document.getElementById("memo").value,
+
+    checks:checks
+
+  };
+
+  localStorage.setItem(
+    "dumpInspection",
+    JSON.stringify(data)
+  );
+
+}
+
+// 復元
+
+function loadForm(){
+
+  const saved =
+  localStorage.getItem(
+    "dumpInspection"
+  );
+
+  if(!saved) return;
+
+  const data =
+  JSON.parse(saved);
+
+  document.getElementById("driver").value =
+  data.driver || "";
+
+  document.getElementById("truck").value =
+  data.truck || "";
+
+  document.getElementById("contractor").value =
+  data.contractor || "";
+
+  document.getElementById("site").value =
+  data.site || "";
+
+  document.getElementById("startKm").value =
+  data.startKm || "";
+
+  document.getElementById("endKm").value =
+  data.endKm || "";
+
+  document.getElementById("fuelKm").value =
+  data.fuelKm || "";
+
+  document.getElementById("fuelLiter").value =
+  data.fuelLiter || "";
+
+  document.getElementById("greaseNext").value =
+  data.greaseNext || "";
+
+  document.getElementById("memo").value =
+  data.memo || "";
+
+  if(data.checks){
+
+    checks = data.checks;
+
+  }
+
+}
+
+// 起動時復元
+
+window.onload = ()=>{
+
+  loadForm();
+
+};
 </script>
 
 </body>
