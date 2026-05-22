@@ -159,7 +159,17 @@ textarea{
 <label>車両番号</label>
 <input id="truck">
 
-<label>現場名</label>
+  <label>
+元請け会社
+</label>
+
+<input
+type="text"
+id="contractor"
+placeholder="元請け名"
+>
+
+  <label>現場名</label>
 <input id="site">
 
 </div>
@@ -453,6 +463,11 @@ async function sendData(){
     truck:
     document.getElementById("truck").value,
 
+    contractor:
+document.getElementById(
+  "contractor"
+).value,
+
     site:
     document.getElementById("site").value,
 
@@ -507,21 +522,62 @@ function toBase64(file){
 
   return new Promise((resolve,reject)=>{
 
-    const reader =
-    new FileReader();
+    const img = new Image();
+
+    const reader = new FileReader();
 
     reader.readAsDataURL(file);
 
-    reader.onload = ()=>{
+    reader.onload = event => {
+
+      img.src = event.target.result;
+
+    };
+
+    img.onload = ()=>{
+
+      const canvas =
+      document.createElement("canvas");
+
+      // 圧縮サイズ
+
+      const maxWidth = 1200;
+
+      const scale =
+      maxWidth / img.width;
+
+      canvas.width = maxWidth;
+
+      canvas.height =
+      img.height * scale;
+
+      const ctx =
+      canvas.getContext("2d");
+
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      // jpeg圧縮
+
+      const compressed =
+      canvas.toDataURL(
+        "image/jpeg",
+        0.6
+      );
 
       resolve(
-        reader.result.split(",")[1]
+        compressed.split(",")[1]
       );
 
     };
 
     reader.onerror = error =>
-      reject(error);
+    reject(error);
 
   });
 
