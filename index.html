@@ -154,12 +154,14 @@ textarea{
 </div>
 
 <label>運転手名</label>
-<input id="driver">
-  oninput="saveForm()"
+<input id="driver"
+  oninput="saveForm()">
+ 
 
 <label>車両番号</label>
-<input id="truck">
-  oninput="saveForm()"
+<input id="truck"
+oninput="saveForm()">
+  
 
   <label>
 元請け会社
@@ -169,12 +171,13 @@ textarea{
 type="text"
 id="contractor"
 placeholder="元請け名"
->
-  oninput="saveForm()"
+  oninput="saveForm()">
+ 
 
   <label>現場名</label>
-<input id="site">
-  oninput="saveForm()"
+<input id="site"
+ oninput="saveForm()" >
+  
 
 </div>
 
@@ -187,21 +190,25 @@ placeholder="元請け名"
 </div>
 
 <label>始業時距離数(km)</label>
-<input type="number" id="startKm">
-  oninput="saveForm()"
+<input type="number" id="startKm"
+ oninput="saveForm()">
+
 
 <label>終業時距離数(km)</label>
 <input type="number" id="endKm"
-oninput="calcDistance()">
-  oninput="saveForm()"
+oninput="calcDistance()"
+   oninput="saveForm()">
+
 
 <label>給油時距離数(km)</label>
-<input type="number" id="fuelKm">
-  .oninput="saveForm()"
+<input type="number" id="fuelKm"
+   oninput="saveForm()">
+
 
 <label>給油量(L)</label>
-<input type="number" id="fuelLiter">
-oninput="saveForm()"
+<input type="number" id="fuelLiter"
+   oninput="saveForm()">
+
 <div class="result-box">
 走行距離：
 <span id="distanceResult">0</span> km
