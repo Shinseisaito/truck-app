@@ -301,29 +301,29 @@ items.forEach(item=>{
 
   div.className = "check-group";
 
-  div.innerHTML = `
+ div.innerHTML = `
 
-  <div class="check-title">
-  ${item}
-  </div>
+<div class="check-title">
+${item}
+</div>
 
-  <div class="check-buttons">
+<div class="check-buttons">
 
-    <button class="ok">
-    ○
-    </button>
+  <button type="button" class="ok">
+  ○
+  </button>
 
-    <button class="ng">
-    ×
-    </button>
+  <button type="button" class="ng">
+  ×
+  </button>
 
-    <button class="na">
-    該当なし
-    </button>
+  <button type="button" class="na">
+  該当なし
+  </button>
 
-  </div>
+</div>
 
-  `;
+`;
 
   const buttons =
   div.querySelectorAll("button");
