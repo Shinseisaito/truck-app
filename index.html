@@ -316,7 +316,7 @@ let checks = {};
 const checksDiv =
 document.getElementById("checks");
 
-// 点検生成
+let checks = {};
 
 items.forEach((item)=>{
 
@@ -328,27 +328,27 @@ items.forEach((item)=>{
 
   div.innerHTML = `
 
-<div class="check-title">
-${item}
-</div>
+  <div class="check-title">
+    ${item}
+  </div>
 
-<div class="check-buttons">
+  <div class="check-buttons">
 
-  <button type="button" class="ok">
-  ○
-  </button>
+    <button type="button" class="ok">
+      ○
+    </button>
 
-  <button type="button" class="ng">
-  ×
-  </button>
+    <button type="button" class="ng">
+      ×
+    </button>
 
-  <button type="button" class="na">
-  該当なし
-  </button>
+    <button type="button" class="na">
+      該当なし
+    </button>
 
-</div>
+  </div>
 
-`;
+  `;
 
   const okBtn =
   div.querySelector(".ok");
@@ -361,35 +361,17 @@ ${item}
 
   okBtn.onclick = ()=>{
 
-    checks[item] = "○";
+    checks[item] = "OK";
 
     saveForm();
-
-    okBtn.style.background =
-    "#16a34a";
-
-    ngBtn.style.background =
-    "#fff";
-
-    naBtn.style.background =
-    "#fff";
 
   };
 
   ngBtn.onclick = ()=>{
 
-    checks[item] = "×";
+    checks[item] = "NG";
 
     saveForm();
-
-    ngBtn.style.background =
-    "#dc2626";
-
-    okBtn.style.background =
-    "#fff";
-
-    naBtn.style.background =
-    "#fff";
 
   };
 
@@ -399,18 +381,9 @@ ${item}
 
     saveForm();
 
-    naBtn.style.background =
-    "#6b7280";
-
-    okBtn.style.background =
-    "#fff";
-
-    ngBtn.style.background =
-    "#fff";
-
   };
 
- checksDiv.appendChild(div); 
+  checksDiv.appendChild(div);
 
 });
 
