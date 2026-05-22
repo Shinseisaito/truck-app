@@ -195,9 +195,10 @@ placeholder="元請け名"
 
 
 <label>終業時距離数(km)</label>
-<input type="number" id="endKm"
-oninput="calcDistance()"
-   oninput="saveForm()">
+<input
+type="number"
+id="endKm"
+oninput="calcDistance();saveForm()">
 
 
 <label>給油時距離数(km)</label>
@@ -306,12 +307,11 @@ const items = [
 "バックブザー",
 "荷台",
 "グリースアップ（キングピン・トラニオン）",
-"グリースアップ（週1項目)",
+"グリースアップ（週１項目）",
 "アルコール"
 
 ];
-
-const checks = {};
+let checks = {};
 
 const checksDiv =
 document.getElementById("checks");
@@ -327,8 +327,6 @@ items.forEach((item)=>{
   "check-item";
 
   div.innerHTML = `
-
- div.innerHTML = `
 
 <div class="check-title">
 ${item}
@@ -412,7 +410,7 @@ ${item}
 
   };
 
-  checksArea.appendChild(div);
+ checksDiv.appendChild(div); 
 
 });
 
