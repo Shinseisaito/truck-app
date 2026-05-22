@@ -328,27 +328,29 @@ items.forEach((item)=>{
 
   div.innerHTML = `
 
-  <div class="check-title">
-    ${item}
-  </div>
+ div.innerHTML = `
 
-  <div class="check-buttons">
+<div class="check-title">
+${item}
+</div>
 
-    <button type="button" class="ok">
-      ○
-    </button>
+<div class="check-buttons">
 
-    <button type="button" class="ng">
-      ×
-    </button>
+  <button type="button" class="ok">
+  ○
+  </button>
 
-    <button type="button" class="na">
-      該当なし
-    </button>
+  <button type="button" class="ng">
+  ×
+  </button>
 
-  </div>
+  <button type="button" class="na">
+  該当なし
+  </button>
 
-  `;
+</div>
+
+`;
 
   const okBtn =
   div.querySelector(".ok");
