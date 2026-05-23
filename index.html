@@ -425,13 +425,6 @@ km
 <label>異常内容</label>
 <textarea id="memo"></textarea>
 
-<label>異常写真</label>
-<input
-type="file"
-id="photo"
-accept="image/*"
-capture="environment"
->
 
 </div>
 
@@ -682,7 +675,7 @@ function loadForm(){
 
 }
 
-async function toBase64(file){
+
 
   return new Promise((resolve,reject)=>{
 
@@ -761,24 +754,7 @@ async function sendData(){
   submitBtn.disabled = true;
   submitBtn.innerText = "送信中...";
 
-  try{
-
-    let photo = "";
-    let photoName = "";
-    let photoType = "";
-
-    const file =
-    photo.files[0];
-
-    if(file){
-
-      photoName = file.name;
-      photoType = "image/jpeg";
-
-      photo =
-      await toBase64(file);
-
-    }
+ 
 
     const data = {
 
@@ -805,10 +781,7 @@ async function sendData(){
 
       checks:checks,
 
-      photo:photo,
-      photoName:photoName,
-      photoType:photoType
-
+     
     };
 
     const response =
