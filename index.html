@@ -674,12 +674,140 @@ function loadForm(){
   calcDistance();
 
 }
+  calcDistance();
 
+}
 
+// ------------------------
+// 送信
+// ------------------------
 
-  return new Promise((resolve,reject)=>{
-<script>
+async function sendData(){
 
+  try{
+
+    const submitBtn =
+    document.getElementById(
+      "submitBtn"
+    );
+
+    submitBtn.disabled = true;
+
+    submitBtn.innerText =
+    "送信中...";
+
+    const data = {
+
+      driver:
+      driver.value,
+
+      truck:
+      truck.value,
+
+      contractor:
+      contractor.value,
+
+      site:
+      site.value,
+
+      startKm:
+      startKm.value,
+
+      endKm:
+      endKm.value,
+
+      fuelKm:
+      fuelKm.value,
+
+      fuelLiter:
+      fuelLiter.value,
+
+      adblueLiter:
+      adblueLiter.value,
+
+      etcType:
+      etcType.value,
+
+      etcStart:
+      etcStart.value,
+
+      etcEnd:
+      etcEnd.value,
+
+      etcPrice:
+      etcPrice.value,
+
+      greaseNext:
+      greaseNext.value,
+
+      memo:
+      memo.value,
+
+      checks:
+      checks
+
+    };
+
+    const response =
+    await fetch(
+      SCRIPT_URL,
+      {
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+          "text/plain"
+        },
+
+        body:
+        JSON.stringify(data)
+
+      }
+    );
+
+    const result =
+    await response.json();
+
+    if(result.status !== "success"){
+
+      alert(
+        "送信失敗\n" +
+        result.message
+      );
+
+      submitBtn.disabled = false;
+
+      submitBtn.innerText =
+      "送信";
+
+      return;
+
+    }
+
+    alert("送信完了");
+
+    localStorage.removeItem(
+      "dumpInspection"
+    );
+
+    location.reload();
+
+  }catch(error){
+
+    alert(
+      "通信エラー\n" +
+      error
+    );
+
+    submitBtn.disabled = false;
+
+    submitBtn.innerText =
+    "送信";
+
+  }
+
+}
 async function sendData(){
 
   const submitBtn =
