@@ -1,10 +1,13 @@
+# トラック運搬管理システム 完成版
+
+## ① index.html（GitHub Pages側）
+
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>トラック運搬管理システム</title>
 
 <style>
@@ -18,11 +21,11 @@ body{
 
 .header{
   background:#111827;
-  color:#fff;
+  color:white;
   padding:20px;
-  text-align:center;
   font-size:24px;
   font-weight:bold;
+  text-align:center;
 }
 
 .container{
@@ -30,7 +33,7 @@ body{
 }
 
 .card{
-  background:#fff;
+  background:white;
   border-radius:16px;
   padding:20px;
   margin-bottom:20px;
@@ -50,7 +53,8 @@ label{
 }
 
 input,
-textarea{
+textarea,
+select{
   width:100%;
   box-sizing:border-box;
   padding:14px;
@@ -58,6 +62,7 @@ textarea{
   border:1px solid #d1d5db;
   margin-bottom:20px;
   font-size:16px;
+  background:white;
 }
 
 textarea{
@@ -65,7 +70,7 @@ textarea{
 }
 
 .check-item{
-  margin-bottom:25px;
+  margin-bottom:24px;
 }
 
 .check-title{
@@ -81,26 +86,26 @@ textarea{
 
 .check-buttons button{
   flex:1;
+  padding:16px;
   border:none;
   border-radius:12px;
-  padding:16px;
   font-size:18px;
   font-weight:bold;
   background:#d1d5db;
 }
 
-.active-ok{
-  background:#16a34a !important;
+.ok.active{
+  background:#16a34a;
   color:white;
 }
 
-.active-ng{
-  background:#dc2626 !important;
+.ng.active{
+  background:#dc2626;
   color:white;
 }
 
-.active-na{
-  background:#6b7280 !important;
+.na.active{
+  background:#6b7280;
   color:white;
 }
 
@@ -114,8 +119,8 @@ textarea{
 
 .fixed-submit{
   position:fixed;
-  left:0;
   bottom:0;
+  left:0;
   width:100%;
   background:white;
   padding:15px;
@@ -138,7 +143,6 @@ textarea{
 }
 
 </style>
-
 </head>
 
 <body>
@@ -150,10 +154,7 @@ textarea{
 <div class="container">
 
 <div class="card">
-
-<div class="section-title">
-基本情報
-</div>
+<div class="section-title">基本情報</div>
 
 <label>運転手名</label>
 <input id="driver">
@@ -170,22 +171,22 @@ textarea{
 </div>
 
 <div class="card">
+<div class="section-title">運行情報</div>
 
-<div class="section-title">
-運行情報
-</div>
-
-<label>始業距離(km)</label>
+<label>始業時距離(km)</label>
 <input type="number" id="startKm">
 
-<label>終業距離(km)</label>
+<label>終業時距離(km)</label>
 <input type="number" id="endKm">
 
 <label>給油時距離(km)</label>
 <input type="number" id="fuelKm">
 
-<label>給油量(L)</label>
+<label>軽油給油量(L)</label>
 <input type="number" id="fuelLiter">
+
+<label>アドブルー給油量(L)</label>
+<input type="number" id="adblueLiter">
 
 <div class="result-box">
 走行距離：
@@ -196,35 +197,109 @@ km
 </div>
 
 <div class="card">
+<div class="section-title">ETC情報</div>
 
-<div class="section-title">
-日常点検
-</div>
+<label>ETC支払い</label>
+<select id="etcType">
+<option value="">選択してください</option>
+<option>得意先払い</option>
+<option>当社払い</option>
+<option>本人払い</option>
+</select>
 
-<div id="checks"></div>
+<label>高速乗り口IC</label>
+<select id="etcStart">
+<option value="">選択してください</option>
+<option>札幌JCT</option>
+<option>札幌北</option>
+<option>札幌南</option>
+<option>北広島</option>
+<option>恵庭</option>
+<option>千歳</option>
+<option>苫小牧東</option>
+<option>苫小牧西</option>
+<option>室蘭</option>
+<option>伊達</option>
+<option>豊浦</option>
+<option>長万部</option>
+<option>札幌西</option>
+<option>手稲</option>
+<option>小樽</option>
+<option>余市</option>
+<option>夕張</option>
+<option>占冠</option>
+<option>トマム</option>
+<option>十勝清水</option>
+<option>芽室</option>
+<option>音更帯広</option>
+<option>池田</option>
+<option>足寄</option>
+<option>釧路西</option>
+<option>釧路中央</option>
+<option>旭川北</option>
+<option>旭川鷹栖</option>
+<option>岩見沢</option>
+<option>滝川</option>
+<option>深川</option>
+</select>
+
+<label>高速降り口IC</label>
+<select id="etcEnd">
+<option value="">選択してください</option>
+<option>札幌JCT</option>
+<option>札幌北</option>
+<option>札幌南</option>
+<option>北広島</option>
+<option>恵庭</option>
+<option>千歳</option>
+<option>苫小牧東</option>
+<option>苫小牧西</option>
+<option>室蘭</option>
+<option>伊達</option>
+<option>豊浦</option>
+<option>長万部</option>
+<option>札幌西</option>
+<option>手稲</option>
+<option>小樽</option>
+<option>余市</option>
+<option>夕張</option>
+<option>占冠</option>
+<option>トマム</option>
+<option>十勝清水</option>
+<option>芽室</option>
+<option>音更帯広</option>
+<option>池田</option>
+<option>足寄</option>
+<option>釧路西</option>
+<option>釧路中央</option>
+<option>旭川北</option>
+<option>旭川鷹栖</option>
+<option>岩見沢</option>
+<option>滝川</option>
+<option>深川</option>
+</select>
+
+<label>高速使用回数</label>
+<input type="number" id="etcPrice">
 
 </div>
 
 <div class="card">
-
-<div class="section-title">
-週次グリース
+<div class="section-title">日常点検</div>
+<div id="checks"></div>
 </div>
+
+<div class="card">
+<div class="section-title">週次グリース管理</div>
 
 <label>次回予定日</label>
 <input type="date" id="greaseNext">
 
 </div>
 
-<div
-class="card"
-id="memoArea"
-style="display:none;"
->
+<div class="card" id="memoArea" style="display:none;">
 
-<div class="section-title">
-異常報告
-</div>
+<div class="section-title">異常報告</div>
 
 <label>異常内容</label>
 <textarea id="memo"></textarea>
@@ -242,7 +317,6 @@ capture="environment"
 </div>
 
 <div class="fixed-submit">
-
 <button
 class="submit-btn"
 id="submitBtn"
@@ -250,7 +324,6 @@ onclick="sendData()"
 >
 送信
 </button>
-
 </div>
 
 <script>
@@ -259,7 +332,6 @@ const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyH9Q6l_Xz1IAd0athj3o2sdZEBiLpSXwsuXPv259cBRzMOuFl5cWnBWfP3_EGgBbE/exec";
 
 const items = [
-
 "タイヤ",
 "ホイールナット",
 "灯火類",
@@ -271,7 +343,6 @@ const items = [
 "グリースアップ（キングピン・トラニオン）",
 "グリースアップ（週１項目）",
 "アルコール"
-
 ];
 
 let checks = {};
@@ -295,15 +366,15 @@ items.forEach(item=>{
 
   <div class="check-buttons">
 
-    <button type="button">
+    <button type="button" class="ok">
       ○
     </button>
 
-    <button type="button">
+    <button type="button" class="ng">
       ×
     </button>
 
-    <button type="button">
+    <button type="button" class="na">
       該当なし
     </button>
 
@@ -314,40 +385,20 @@ items.forEach(item=>{
   const buttons =
   div.querySelectorAll("button");
 
-  buttons[0].onclick =
-  ()=>setCheck(
-    item,
-    "OK",
-    buttons[0],
-    "active-ok"
-  );
+  buttons[0].onclick = ()=>
+  setCheck(item,"OK",buttons[0]);
 
-  buttons[1].onclick =
-  ()=>setCheck(
-    item,
-    "NG",
-    buttons[1],
-    "active-ng"
-  );
+  buttons[1].onclick = ()=>
+  setCheck(item,"NG",buttons[1]);
 
-  buttons[2].onclick =
-  ()=>setCheck(
-    item,
-    "該当なし",
-    buttons[2],
-    "active-na"
-  );
+  buttons[2].onclick = ()=>
+  setCheck(item,"該当なし",buttons[2]);
 
   checksDiv.appendChild(div);
 
 });
 
-function setCheck(
-item,
-value,
-btn,
-className
-){
+function setCheck(item,value,btn){
 
   checks[item] = value;
 
@@ -357,16 +408,10 @@ className
   parent
   .querySelectorAll("button")
   .forEach(b=>{
-
-    b.classList.remove(
-      "active-ok",
-      "active-ng",
-      "active-na"
-    );
-
+    b.classList.remove("active");
   });
 
-  btn.classList.add(className);
+  btn.classList.add("active");
 
   const hasNg =
   Object.values(checks)
@@ -375,9 +420,7 @@ className
   document
   .getElementById("memoArea")
   .style.display =
-  hasNg
-  ? "block"
-  : "none";
+  hasNg ? "block" : "none";
 
   if(
     item ===
@@ -393,19 +436,10 @@ className
       next.getDate()+7
     );
 
-    const yyyy =
-    next.getFullYear();
-
-    const mm =
-    String(next.getMonth()+1)
-    .padStart(2,"0");
-
-    const dd =
-    String(next.getDate())
-    .padStart(2,"0");
-
     greaseNext.value =
-    `${yyyy}-${mm}-${dd}`;
+    next
+    .toISOString()
+    .split("T")[0];
 
   }
 
@@ -426,23 +460,6 @@ function calcDistance(){
 
 }
 
-document
-.querySelectorAll("input,textarea")
-.forEach(el=>{
-
-  el.addEventListener(
-    "input",
-    ()=>{
-
-      calcDistance();
-
-      saveForm();
-
-    }
-  );
-
-});
-
 function saveForm(){
 
   const data = {
@@ -457,6 +474,12 @@ function saveForm(){
 
     fuelKm:fuelKm.value,
     fuelLiter:fuelLiter.value,
+    adblueLiter:adblueLiter.value,
+
+    etcType:etcType.value,
+    etcStart:etcStart.value,
+    etcEnd:etcEnd.value,
+    etcPrice:etcPrice.value,
 
     greaseNext:greaseNext.value,
 
@@ -482,85 +505,54 @@ function loadForm(){
 
   if(!saved) return;
 
-  const data =
-  JSON.parse(saved);
+  const data = JSON.parse(saved);
 
-  driver.value =
-  data.driver || "";
+  driver.value = data.driver || "";
+  truck.value = data.truck || "";
+  contractor.value = data.contractor || "";
+  site.value = data.site || "";
 
-  truck.value =
-  data.truck || "";
+  startKm.value = data.startKm || "";
+  endKm.value = data.endKm || "";
 
-  contractor.value =
-  data.contractor || "";
+  fuelKm.value = data.fuelKm || "";
+  fuelLiter.value = data.fuelLiter || "";
+  adblueLiter.value = data.adblueLiter || "";
 
-  site.value =
-  data.site || "";
+  etcType.value = data.etcType || "";
+  etcStart.value = data.etcStart || "";
+  etcEnd.value = data.etcEnd || "";
+  etcPrice.value = data.etcPrice || "";
 
-  startKm.value =
-  data.startKm || "";
+  greaseNext.value = data.greaseNext || "";
 
-  endKm.value =
-  data.endKm || "";
+  memo.value = data.memo || "";
 
-  fuelKm.value =
-  data.fuelKm || "";
-
-  fuelLiter.value =
-  data.fuelLiter || "";
-
-  greaseNext.value =
-  data.greaseNext || "";
-
-  memo.value =
-  data.memo || "";
-
-  checks =
-  data.checks || {};
+  checks = data.checks || {};
 
   document
   .querySelectorAll(".check-item")
   .forEach((div,index)=>{
 
-    const item =
-    items[index];
-
-    const value =
-    checks[item];
+    const item = items[index];
+    const value = checks[item];
 
     if(!value) return;
 
     const buttons =
     div.querySelectorAll("button");
 
-    if(value==="OK"){
-
-      buttons[0]
-      .classList.add(
-        "active-ok"
-      );
-
+    if(value === "OK"){
+      buttons[0].classList.add("active");
     }
 
-    if(value==="NG"){
-
-      buttons[1]
-      .classList.add(
-        "active-ng"
-      );
-
-      memoArea.style.display =
-      "block";
-
+    if(value === "NG"){
+      buttons[1].classList.add("active");
+      memoArea.style.display = "block";
     }
 
-    if(value==="該当なし"){
-
-      buttons[2]
-      .classList.add(
-        "active-na"
-      );
-
+    if(value === "該当なし"){
+      buttons[2].classList.add("active");
     }
 
   });
@@ -571,8 +563,7 @@ function loadForm(){
 
 async function toBase64(file){
 
-  return new Promise(
-  (resolve,reject)=>{
+  return new Promise((resolve,reject)=>{
 
     const reader =
     new FileReader();
@@ -581,27 +572,19 @@ async function toBase64(file){
 
     reader.onload = e=>{
 
-      const img =
-      new Image();
+      const img = new Image();
 
-      img.src =
-      e.target.result;
+      img.src = e.target.result;
 
       img.onload = ()=>{
 
         const canvas =
-        document.createElement(
-          "canvas"
-        );
+        document.createElement("canvas");
 
-        let width =
-        img.width;
+        let width = img.width;
+        let height = img.height;
 
-        let height =
-        img.height;
-
-        const maxWidth =
-        1200;
+        const maxWidth = 1000;
 
         if(width > maxWidth){
 
@@ -609,16 +592,12 @@ async function toBase64(file){
           height *
           (maxWidth/width);
 
-          width =
-          maxWidth;
+          width = maxWidth;
 
         }
 
-        canvas.width =
-        width;
-
-        canvas.height =
-        height;
+        canvas.width = width;
+        canvas.height = height;
 
         const ctx =
         canvas.getContext("2d");
@@ -631,22 +610,21 @@ async function toBase64(file){
           height
         );
 
-        const base64 =
+        const compressed =
         canvas.toDataURL(
           "image/jpeg",
-          0.5
+          0.4
         );
 
         resolve(
-          base64.split(",")[1]
+          compressed.split(",")[1]
         );
 
       };
 
     };
 
-    reader.onerror =
-    reject;
+    reader.onerror = reject;
 
   });
 
@@ -660,37 +638,24 @@ async function sendData(){
   );
 
   submitBtn.disabled = true;
-
-  submitBtn.innerText =
-  "送信中...";
+  submitBtn.innerText = "送信中...";
 
   try{
-
-    const photoInput =
-    document.getElementById(
-      "photo"
-    );
 
     let photo = "";
     let photoName = "";
     let photoType = "";
 
-    if(
-      photoInput.files &&
-      photoInput.files[0]
-    ){
+    const file =
+    photo.files[0];
 
-      const file =
-      photoInput.files[0];
+    if(file){
+
+      photoName = file.name;
+      photoType = "image/jpeg";
 
       photo =
       await toBase64(file);
-
-      photoName =
-      file.name;
-
-      photoType =
-      "image/jpeg";
 
     }
 
@@ -706,6 +671,12 @@ async function sendData(){
 
       fuelKm:fuelKm.value,
       fuelLiter:fuelLiter.value,
+      adblueLiter:adblueLiter.value,
+
+      etcType:etcType.value,
+      etcStart:etcStart.value,
+      etcEnd:etcEnd.value,
+      etcPrice:etcPrice.value,
 
       greaseNext:greaseNext.value,
 
@@ -719,33 +690,41 @@ async function sendData(){
 
     };
 
-   const response =
-await fetch(
-  SCRIPT_URL,
-  {
-    method:"POST",
-    headers:{
-      "Content-Type":"text/plain"
-    },
-    body:JSON.stringify(data)
-  }
-);
+    const response =
+    await fetch(
+      SCRIPT_URL,
+      {
 
-const result =
-await response.text();
+        method:"POST",
 
-if(result !== "OK"){
+        headers:{
+          "Content-Type":"text/plain"
+        },
 
-  alert(
-    "送信失敗\n" + result
-  );
+        body:JSON.stringify(data)
 
-  return;
+      }
+    );
 
-}
+    const result =
+    await response.json();
 
-alert("送信完了");
-    
+    if(result.status !== "success"){
+
+      alert(
+        "送信失敗\n" +
+        result.message
+      );
+
+      submitBtn.disabled = false;
+      submitBtn.innerText = "送信";
+
+      return;
+
+    }
+
+    alert("送信完了");
+
     localStorage.removeItem(
       "dumpInspection"
     );
@@ -755,23 +734,248 @@ alert("送信完了");
   }catch(error){
 
     alert(
-      "通信エラー\n\n" +
+      "通信エラー\n" +
       error
     );
 
+    submitBtn.disabled = false;
+    submitBtn.innerText = "送信";
+
   }
-
-  submitBtn.disabled = false;
-
-  submitBtn.innerText =
-  "送信";
 
 }
 
-window.onload =
-loadForm;
+window.onload = ()=>{
+
+  loadForm();
+
+  document
+  .querySelectorAll(
+    "input,textarea,select"
+  )
+  .forEach(el=>{
+
+    el.addEventListener(
+      "input",
+      ()=>{
+
+        calcDistance();
+
+        saveForm();
+
+      }
+    );
+
+  });
+
+};
 
 </script>
 
 </body>
 </html>
+```
+
+---
+
+# ② Code.gs（Apps Script側）
+
+```javascript
+function doGet() {
+
+  return ContentService
+  .createTextOutput(
+    JSON.stringify({
+      status:"running"
+    })
+  )
+  .setMimeType(
+    ContentService.MimeType.JSON
+  );
+
+}
+
+function doPost(e){
+
+  try{
+
+    const sheet =
+    SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getSheetByName("シート1");
+
+    const data =
+    JSON.parse(e.postData.contents);
+
+    const distance =
+    Number(data.endKm || 0)
+    -
+    Number(data.startKm || 0);
+
+    let photoUrl = "";
+
+    if(data.photo){
+
+      const folder =
+      DriveApp.getFolderById(
+        "1T5XiX7OYmU_oorpa3P43KDPU0XkEg2EQ"
+      );
+
+      const blob =
+      Utilities.newBlob(
+
+        Utilities.base64Decode(
+          data.photo
+        ),
+
+        data.photoType,
+
+        data.photoName
+
+      );
+
+      const file =
+      folder.createFile(blob);
+
+      photoUrl =
+      file.getUrl();
+
+    }
+
+    sheet.appendRow([
+
+      new Date(),
+
+      data.driver || "",
+      data.truck || "",
+      data.contractor || "",
+      data.site || "",
+
+      data.startKm || "",
+      data.endKm || "",
+
+      distance,
+
+      data.fuelKm || "",
+      data.fuelLiter || "",
+      data.adblueLiter || "",
+
+      data.etcType || "",
+      data.etcStart || "",
+      data.etcEnd || "",
+      data.etcPrice || "",
+
+      data.checks?.["タイヤ"] || "",
+      data.checks?.["ホイールナット"] || "",
+      data.checks?.["灯火類"] || "",
+      data.checks?.["油漏れ"] || "",
+      data.checks?.["エア漏れ"] || "",
+      data.checks?.["ホーン"] || "",
+      data.checks?.["バックブザー"] || "",
+      data.checks?.["荷台"] || "",
+      data.checks?.["グリースアップ（キングピン・トラニオン）"] || "",
+      data.checks?.["グリースアップ（週１項目）"] || "",
+      data.checks?.["アルコール"] || "",
+
+      data.greaseNext || "",
+
+      data.memo || "",
+
+      photoUrl
+
+    ]);
+
+    return ContentService
+    .createTextOutput(
+      JSON.stringify({
+        status:"success"
+      })
+    )
+    .setMimeType(
+      ContentService.MimeType.JSON
+    );
+
+  }catch(error){
+
+    return ContentService
+    .createTextOutput(
+      JSON.stringify({
+        status:"error",
+        message:String(error)
+      })
+    )
+    .setMimeType(
+      ContentService.MimeType.JSON
+    );
+
+  }
+
+}
+```
+
+---
+
+# ③ スプレッドシート1行目
+
+```text
+日時
+運転手
+車両番号
+元請け
+現場名
+始業距離
+終業距離
+走行距離
+給油距離
+軽油L
+アドブルーL
+ETC支払い
+高速乗り口
+高速降り口
+高速使用回数
+タイヤ
+ホイールナット
+灯火類
+油漏れ
+エア漏れ
+ホーン
+バックブザー
+荷台
+グリースアップ（キングピン・トラニオン）
+グリースアップ（週１項目）
+アルコール
+次回グリース日
+異常内容
+写真URL
+```
+
+---
+
+# ④ 最後に絶対やること
+
+## Apps Script 再デプロイ
+
+1. デプロイ
+2. 新しいデプロイ
+3. ウェブアプリ
+4. 次のユーザーとして実行 → 自分
+5. アクセスできるユーザー → 全員
+6. デプロイ
+7. 新URLをコピー
+
+---
+
+## HTML側
+
+```javascript
+const SCRIPT_URL =
+"ここに新URL";
+```
+
+に貼り替える。
+
+---
+
+## GitHub Pages更新
+
+index.html を上書き保存して push。
