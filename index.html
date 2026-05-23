@@ -445,6 +445,10 @@ onclick="sendData()"
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyH9Q6l_Xz1IAd0athj3o2sdZEBiLpSXwsuXPv259cBRzMOuFl5cWnBWfP3_EGgBbE/exec";
 
+// --------------------
+// 点検項目
+// --------------------
+
 const items = [
 "タイヤ",
 "ホイールナット",
@@ -463,6 +467,10 @@ let checks = {};
 
 const checksDiv =
 document.getElementById("checks");
+
+// --------------------
+// 点検ボタン生成
+// --------------------
 
 items.forEach(item=>{
 
@@ -512,6 +520,10 @@ items.forEach(item=>{
 
 });
 
+// --------------------
+// 点検状態
+// --------------------
+
 function setCheck(item,value,btn){
 
   checks[item] = value;
@@ -522,19 +534,23 @@ function setCheck(item,value,btn){
   parent
   .querySelectorAll("button")
   .forEach(b=>{
+
     b.classList.remove("active");
+
   });
 
   btn.classList.add("active");
+
+  // NG表示
 
   const hasNg =
   Object.values(checks)
   .includes("NG");
 
-  document
-  .getElementById("memoArea")
-  .style.display =
+  memoArea.style.display =
   hasNg ? "block" : "none";
+
+  // グリース7日後
 
   if(
     item ===
@@ -561,6 +577,10 @@ function setCheck(item,value,btn){
 
 }
 
+// --------------------
+// 距離計算
+// --------------------
+
 function calcDistance(){
 
   const start =
@@ -573,6 +593,10 @@ function calcDistance(){
   end - start;
 
 }
+
+// --------------------
+// 保存
+// --------------------
 
 function saveForm(){
 
@@ -610,6 +634,10 @@ function saveForm(){
 
 }
 
+// --------------------
+// 復元
+// --------------------
+
 function loadForm(){
 
   const saved =
@@ -619,54 +647,96 @@ function loadForm(){
 
   if(!saved) return;
 
-  const data = JSON.parse(saved);
+  const data =
+  JSON.parse(saved);
 
-  driver.value = data.driver || "";
-  truck.value = data.truck || "";
-  contractor.value = data.contractor || "";
-  site.value = data.site || "";
+  driver.value =
+  data.driver || "";
 
-  startKm.value = data.startKm || "";
-  endKm.value = data.endKm || "";
+  truck.value =
+  data.truck || "";
 
-  fuelKm.value = data.fuelKm || "";
-  fuelLiter.value = data.fuelLiter || "";
-  adblueLiter.value = data.adblueLiter || "";
+  contractor.value =
+  data.contractor || "";
 
-  etcType.value = data.etcType || "";
-  etcStart.value = data.etcStart || "";
-  etcEnd.value = data.etcEnd || "";
-  etcPrice.value = data.etcPrice || "";
+  site.value =
+  data.site || "";
 
-  greaseNext.value = data.greaseNext || "";
+  startKm.value =
+  data.startKm || "";
 
-  memo.value = data.memo || "";
+  endKm.value =
+  data.endKm || "";
 
-  checks = data.checks || {};
+  fuelKm.value =
+  data.fuelKm || "";
+
+  fuelLiter.value =
+  data.fuelLiter || "";
+
+  adblueLiter.value =
+  data.adblueLiter || "";
+
+  etcType.value =
+  data.etcType || "";
+
+  etcStart.value =
+  data.etcStart || "";
+
+  etcEnd.value =
+  data.etcEnd || "";
+
+  etcPrice.value =
+  data.etcPrice || "";
+
+  greaseNext.value =
+  data.greaseNext || "";
+
+  memo.value =
+  data.memo || "";
+
+  checks =
+  data.checks || {};
+
+  // ボタン復元
 
   document
   .querySelectorAll(".check-item")
   .forEach((div,index)=>{
 
-    const item = items[index];
-    const value = checks[item];
+    const item =
+    items[index];
+
+    const value =
+    checks[item];
 
     if(!value) return;
 
     const buttons =
     div.querySelectorAll("button");
 
-    if(value === "OK"){
-      buttons[0].classList.add("active");
+    if(value==="OK"){
+
+      buttons[0]
+      .classList.add("active");
+
     }
 
-    if(value === "NG"){
-      buttons[1].classList.add("active");
-      memoArea.style.display = "block";
+    if(value==="NG"){
+
+      buttons[1]
+      .classList.add("active");
+
+      memoArea.style.display =
+      "block";
+
     }
 
-    if(value === "該当なし"){
-      buttons[2].classList.add("active");
+    if(value==="該当なし"){
+
+      buttons[2]
+      .classList.add("active");
+
     }
 
   });
@@ -674,13 +744,10 @@ function loadForm(){
   calcDistance();
 
 }
-  calcDistance();
 
-}
-
-// ------------------------
+// --------------------
 // 送信
-// ------------------------
+// --------------------
 
 async function sendData(){
 
@@ -698,53 +765,28 @@ async function sendData(){
 
     const data = {
 
-      driver:
-      driver.value,
+      driver:driver.value,
+      truck:truck.value,
+      contractor:contractor.value,
+      site:site.value,
 
-      truck:
-      truck.value,
+      startKm:startKm.value,
+      endKm:endKm.value,
 
-      contractor:
-      contractor.value,
+      fuelKm:fuelKm.value,
+      fuelLiter:fuelLiter.value,
+      adblueLiter:adblueLiter.value,
 
-      site:
-      site.value,
+      etcType:etcType.value,
+      etcStart:etcStart.value,
+      etcEnd:etcEnd.value,
+      etcPrice:etcPrice.value,
 
-      startKm:
-      startKm.value,
+      greaseNext:greaseNext.value,
 
-      endKm:
-      endKm.value,
+      memo:memo.value,
 
-      fuelKm:
-      fuelKm.value,
-
-      fuelLiter:
-      fuelLiter.value,
-
-      adblueLiter:
-      adblueLiter.value,
-
-      etcType:
-      etcType.value,
-
-      etcStart:
-      etcStart.value,
-
-      etcEnd:
-      etcEnd.value,
-
-      etcPrice:
-      etcPrice.value,
-
-      greaseNext:
-      greaseNext.value,
-
-      memo:
-      memo.value,
-
-      checks:
-      checks
+      checks:checks
 
     };
 
@@ -808,120 +850,11 @@ async function sendData(){
   }
 
 }
-async function sendData(){
 
-  const submitBtn =
-  document.getElementById("submitBtn");
+// --------------------
+// 起動
+// --------------------
 
-  submitBtn.disabled = true;
-  submitBtn.innerText = "送信中...";
-
-  try{
-
-    const data = {
-
-      driver:driver.value,
-      truck:truck.value,
-      contractor:contractor.value,
-      site:site.value,
-
-      startKm:startKm.value,
-      endKm:endKm.value,
-
-      fuelKm:fuelKm.value,
-      fuelLiter:fuelLiter.value,
-      adblueLiter:adblueLiter.value,
-
-      etcType:etcType.value,
-      etcStart:etcStart.value,
-      etcEnd:etcEnd.value,
-      etcPrice:etcPrice.value,
-
-      greaseNext:greaseNext.value,
-
-      memo:memo.value,
-
-      checks:checks
-
-    };
-
-    const response =
-    await fetch(
-      SCRIPT_URL,
-      {
-        method:"POST",
-        headers:{
-          "Content-Type":"text/plain"
-        },
-        body:JSON.stringify(data)
-      }
-    );
-
-    const result =
-    await response.json();
-
-    if(result.status !== "success"){
-
-      alert(
-        "送信失敗\n" +
-        result.message
-      );
-
-      submitBtn.disabled = false;
-      submitBtn.innerText = "送信";
-
-      return;
-
-    }
-
-    alert("送信完了");
-
-    localStorage.removeItem(
-      "dumpInspection"
-    );
-
-    location.reload();
-
-  }catch(error){
-
-    alert(
-      "通信エラー\n" +
-      error
-    );
-
-    submitBtn.disabled = false;
-    submitBtn.innerText = "送信";
-
-  }
-
-}
-
-window.onload = ()=>{
-
-  loadForm();
-
-  document
-  .querySelectorAll(
-    "input,textarea,select"
-  )
-  .forEach(el=>{
-
-    el.addEventListener(
-      "input",
-      ()=>{
-
-        calcDistance();
-
-        saveForm();
-
-      }
-    );
-
-  });
-
-};
-
-</script>
 window.onload = ()=>{
 
   loadForm();
